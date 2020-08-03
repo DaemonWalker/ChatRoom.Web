@@ -15,4 +15,10 @@ export class SessionUtil {
         let jwt = SessionUtil.get("auth");
         return jwt !== undefined && jwt !== "";
     }
+    public static getUserName(): string {
+        return this.get("userName");
+    }
+    public static getUserId():string{
+        return this.get("userId");
+    }
 }

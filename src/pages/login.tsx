@@ -1,13 +1,12 @@
 import React from 'react';
 import { Row, Col, Form, Input, Button, Modal } from 'antd'
-import { Link } from 'react-router-dom';
 const { Password } = Input;
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
 const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: { offset: 8, span: 8 },
 };
 export class Login extends React.Component<IProps, IState> {
     constructor(props: IProps) {
