@@ -1,22 +1,37 @@
 import React from 'react';
-import { Row } from 'antd';
-import { SessionUtil } from '../utils/sessionUtil';
+import { Row, Card } from 'antd';
+import { MessageModel } from '../models/messageModel';
+import { MessageModelUtil } from '../utils/messageModelUtil';
 
 export class ChatMessage extends React.Component<IProps, IState>{
     render() {
         return (
-            <Row justify={this.props.userId === SessionUtil.getUserId() ? "end" : "start"}>
-                <p>{`${this.props.userName} ${this.props.date}`}</p>
-                <p>{`${this.props.message}`}</p>
+            <Row justify={MessageModelUtil.isCurrentUserMessage(this.props.message) ? "end" : "start"}>
+                <Card size="small"
+                    title={
+                        this.props.message.isNotify ?
+                            "" :
+                            <Row justify={MessageModelUtil.isCurrentUserMessage(this.props.message) ? "end" : "start"}>
+                                {`${this.props.message.user.userName} ${this.props.message.date}`}
+                            </Row>
+                    }
+                    style={{ marginBottom: 10 }}
+                >
+                    <p style={{ marginBottom: 0, textAlign: MessageModelUtil.isCurrentUserMessage(this.props.message) ? "start" : "end" }}>
+                        {
+                            this.props.message.isNotify ?
+                                `${this.props.message.content} ${this.props.message.date}` :
+                                `${this.props.message.content}`
+                        }
+                    </p>
+                </Card>
             </Row>
         )
     }
+
 }
 interface IProps {
-    message: string;
-    userName: string;
-    userId: string;
-    date: string;
+    message: MessageModel
 }
 interface IState {
 

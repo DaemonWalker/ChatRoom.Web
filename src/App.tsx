@@ -2,6 +2,7 @@ import './styles/App.css'
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined, } from '@ant-design/icons';
+import { ChatRoom } from './components/chatRoom';
 
 const { Header, Content, Sider } = Layout;
 
@@ -41,7 +42,7 @@ export class App extends React.Component<IProps, IState> {
                             minHeight: 280,
                         }}
                     >
-                        Content
+                        <ChatRoom url="hall"></ChatRoom>
                     </Content>
                 </Layout>
             </Layout >

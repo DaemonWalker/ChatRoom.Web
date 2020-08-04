@@ -1,37 +1,57 @@
+import '../styles/chatRoom.css';
 import React from 'react';
-import { Row, Col, Input, Button } from 'antd';
+import { Row, Col, Input, Button, List } from 'antd';
 import { ChatClient } from '../chatClient/chatClient'
+import { MessageModelUtil } from '../utils/messageModelUtil';
+import { MessageModel } from '../models/messageModel'
+import { UserModel } from '../models/userModel';
+import { SessionUtil } from '../utils/sessionUtil'
+import { ChatMessage } from './chatMessage';
+
 export class ChatRoom extends React.Component<IProps, IState> {
     private client: ChatClient;
-    private text: string;
     constructor(props: IProps) {
         super(props);
         this.client = new ChatClient(this.props.url, this.showMessage);
         this.state = {
-            messages: []
+            messages: [],
+            users: [{
+                userId: SessionUtil.getUserId(),
+                userName: SessionUtil.getUserName(),
+                isTempUser: SessionUtil.getUserIsTemp()
+            }],
+            text: ""
         };
+        window.onbeforeunload = (event: BeforeUnloadEvent) => {
+            this.client.closeConnection();
+        }
     }
-    showMessage = (msg: string) => {
-        let temp = this.state.messages;
-        temp.push(msg);
+    componentWillUnmount() {
+        this.client.closeConnection();
+    }
+    showMessage = (message: MessageModel) => {
         this.setState({
-            messages: temp
+            messages: [...this.state.messages, message]
         });
     }
     sendMessage = () => {
-        this.client.sendMessage(this.text);
-        this.text = "";
+        this.client.sendMessage(MessageModelUtil.createDefault(this.state.text));
+        this.setState({ text: "" });
     }
     render() {
         return (
-            <Row align="middle" justify="center">
+            <Row align="bottom" justify="center" className="chatRoom">
                 <Col md={18}>
-                    <div></div>
+                    <List
+                        dataSource={this.state.messages}
+                        renderItem={item => <ChatMessage message={item} />}
+                    ></List>
                     <Row justify="end">
-                        <Col>
+                        <Col span={24} style={{ marginBottom: 10 }}>
                             <Input
-                                onChange={event => this.text = event.target.value}
+                                onChange={event => this.setState({ text: event.target.value })}
                                 onPressEnter={this.sendMessage}
+                                value={this.state.text}
                             />
                         </Col>
                         <Col>
@@ -48,5 +68,7 @@ interface IProps {
     url: string
 }
 interface IState {
-    messages: string[]
+    messages: MessageModel[],
+    users: UserModel[],
+    text: string
 }

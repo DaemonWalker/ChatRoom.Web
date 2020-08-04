@@ -15,10 +15,16 @@ export class SessionUtil {
         let jwt = SessionUtil.get("auth");
         return jwt !== undefined && jwt !== "";
     }
+
+    static temp = "Walker" + Math.floor(Math.random() * 1000).toString();
+
     public static getUserName(): string {
         return this.get("userName");
     }
-    public static getUserId():string{
+    public static getUserId(): string {
         return this.get("userId");
+    }
+    public static getUserIsTemp(): boolean {
+        return this.get("isTemp") !== "0";
     }
 }
