@@ -1,5 +1,11 @@
 import React from 'react';
 import { Row, Col, Form, Input, Button, Modal } from 'antd'
+import { LoginModel } from '../models/loginModel'
+import { Api } from '../utils/api';
+import { GlobalUtil } from '../utils/globalUtil'
+import { SessionUtil } from '../utils/sessionUtil';
+import { LoginResponseModel } from '../models/loginResponseModel';
+import { RouteComponentProps } from 'react-router-dom';
 const { Password } = Input;
 const layout = {
     labelCol: { span: 8 },
@@ -9,12 +15,39 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 8 },
 };
 export class Login extends React.Component<IProps, IState> {
+    formData: LoginModel;
     constructor(props: IProps) {
         super(props);
-        this.state = { showModal: false };
+        this.state = {
+            showModal: false,
+            loginBtnLoading: false
+        };
+        this.formData = {
+            account: "",
+            password: ""
+        }
     }
     tempModalCancel = () => this.setState({ showModal: false });
     showModal = () => this.setState({ showModal: true });
+    login = () => {
+        this.setState({
+            loginBtnLoading: true
+        })
+        Api.login(
+            this.formData,
+            (res: LoginResponseModel) => {
+                if (GlobalUtil.stringIsNullOrEmpty(res.sessionId)) {
+
+                }
+                else {
+                    SessionUtil.setLoginInfo(res);
+                    this.props.history.push("/");
+                }
+            },
+            (res: any) => {
+                this.setState({ loginBtnLoading: false })
+            });
+    }
     render() {
         return (
             <>
@@ -22,13 +55,13 @@ export class Login extends React.Component<IProps, IState> {
                     <Col lg={6} md={8} sm={18} xs={24}>
                         <Form {...layout}>
                             <Form.Item name="account" label="帐号" rules={[{ required: true }]}>
-                                <Input></Input>
+                                <Input onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.formData.account = event.target.value}></Input>
                             </Form.Item>
                             <Form.Item name="password" label="密码" rules={[{ required: true }]}>
-                                <Password></Password>
+                                <Password onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.formData.password = event.target.value}></Password>
                             </Form.Item>
                             <Form.Item {...tailLayout}>
-                                <Button type="primary" htmlType="submit">
+                                <Button type="primary" htmlType="button" loading={this.state.loginBtnLoading} onClick={this.login}>
                                     登录
                                 </Button>
                                 <Button type="link" onClick={this.showModal}>
@@ -56,9 +89,10 @@ export class Login extends React.Component<IProps, IState> {
         )
     }
 }
-interface IProps {
+interface IProps extends RouteComponentProps {
 
 }
 interface IState {
-    showModal: boolean
+    showModal: boolean,
+    loginBtnLoading: boolean;
 }
