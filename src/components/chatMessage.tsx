@@ -17,7 +17,7 @@ export class ChatMessage extends React.Component<IProps, IState>{
                     }
                     style={{ marginBottom: 10 }}
                 >
-                    <p style={{ marginBottom: 0, textAlign: MessageModelUtil.isCurrentUserMessage(this.props.message) ? "start" : "end" }}>
+                    <p style={{ marginBottom: 0, textAlign: MessageModelUtil.isCurrentUserMessage(this.props.message) ? "end" : "start" }}>
                         {
                             this.props.message.isNotify ?
                                 `${this.props.message.content} ${this.props.message.date}` :

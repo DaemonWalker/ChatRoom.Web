@@ -6,7 +6,7 @@ export class PrivateRoute extends Route {
     render() {
         return (
             SessionUtil.isAuth() ?
-                <Route path={this.props.path} component={this.props.component} exact={this.props.exact}></Route>
+                <Route path={this.props.path} component={this.props.component} exact={this.props.exact} render={this.props.render}></Route>
                 :
                 <Redirect to="/login"></Redirect>
         );

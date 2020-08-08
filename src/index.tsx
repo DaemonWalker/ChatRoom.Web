@@ -11,7 +11,7 @@ import { PrivateRoute } from './components/privateRoute'
 ReactDOM.render(
     <BrowserRouter>
         <Route path="/login" component={Login}></Route>
-        <PrivateRoute path="/" exact component={App}></PrivateRoute>
+        <PrivateRoute path="/" component={App}></PrivateRoute>
     </BrowserRouter>,
     document.getElementById('root')
 );

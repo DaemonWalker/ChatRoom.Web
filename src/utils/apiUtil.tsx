@@ -2,7 +2,7 @@ import { SessionUtil } from "./sessionUtil";
 
 export class ApiUtil {
     public static get<T>(url: string, success: (res: any) => any, error?: (res: any) => any): Promise<T> {
-        return fetch(url).then(res => res.json).then(success, error);
+        return fetch(url).then(res => res.json()).then(success, error);
     }
     public static post<T>(url: string, method: "post" | "put" | "delete", data: any, success: (res: T) => any, error?: (res: any) => any): Promise<any> {
         return fetch(url,
@@ -14,7 +14,9 @@ export class ApiUtil {
                 },
                 body: JSON.stringify(data)
             })
-            .then(res => res.json())
+            .then(res => {
+                return res.json();
+            })
             .then(success, error);
     }
 }

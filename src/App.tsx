@@ -1,8 +1,12 @@
 import './styles/App.css'
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined, } from '@ant-design/icons';
+import { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined, BarChartOutlined } from '@ant-design/icons';
 import { ChatRoom } from './components/chatRoom';
+import { SignOut } from './components/signOut'
+import { RouteComponentProps, Link } from 'react-router-dom'
+import { PrivateRoute } from './components/privateRoute';
+import { Statistics } from './components/statistics'
 
 const { Header, Content, Sider } = Layout;
 
@@ -23,8 +27,11 @@ export class App extends React.Component<IProps, IState> {
                     <div className="logo" />
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                         <Menu.Item key="1" icon={<UserOutlined />}>
-                            nav 1
-                    </Menu.Item>
+                            聊天室
+                        </Menu.Item>
+                        <Menu.Item key="2" icon={<BarChartOutlined />}>
+                            <Link to="/statistics">各种统计</Link>
+                        </Menu.Item>
                     </Menu>
                 </Sider>
                 <Layout className="site-layout">
@@ -33,6 +40,7 @@ export class App extends React.Component<IProps, IState> {
                             className: 'trigger',
                             onClick: this.toggle,
                         })}
+                        <SignOut {...this.props}></SignOut>
                     </Header>
                     <Content
                         className="site-layout-background"
@@ -42,15 +50,16 @@ export class App extends React.Component<IProps, IState> {
                             minHeight: 280,
                         }}
                     >
-                        <ChatRoom url="hall"></ChatRoom>
+                        <PrivateRoute path="/statistics" exact component={Statistics}></PrivateRoute>
+                        <PrivateRoute path="/" exact render={(props) => (<ChatRoom url={"hall"} {...props} ></ChatRoom>)}></PrivateRoute>
                     </Content>
-                </Layout>
+                </Layout >
             </Layout >
         );
     }
 }
 
-interface IProps {
+interface IProps extends RouteComponentProps {
 
 }
 interface IState {
