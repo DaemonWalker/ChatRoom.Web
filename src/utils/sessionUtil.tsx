@@ -1,10 +1,13 @@
 import { LoginResponseModel } from "../models/loginResponseModel";
+import { Constance } from "./constance";
+import { GlobalUtil } from "./globalUtil";
 
 export class SessionUtil {
     private static readonly KEY_USERNAME = "userName";
     private static readonly KEY_USERID = "userId";
     private static readonly KEY_SESSIONID = "sessionId";
     private static readonly KEY_USERISTEMP = "isTemp";
+    private static readonly KEY_WSPORT = "wsPort";
     public static get(key: string): string {
         let value = window.localStorage.getItem(key);
         if (value === undefined || value === null) {
@@ -50,5 +53,29 @@ export class SessionUtil {
         this.setUserId(info.userId);
         this.setUserName(info.userName);
         this.setSessionId(info.sessionId);
+    }
+    public static setDefaultSever(port: string) {
+        this.set(this.KEY_WSPORT, port);
+    }
+    public static getDefaultServer(): string {
+        let port = this.get(this.KEY_WSPORT);
+        if (GlobalUtil.stringIsNullOrEmpty(port)) {
+            return "7181";
+        }
+        else {
+            return port;
+        }
+    }
+    public static getCurrentServerName(): string {
+        let port = this.getDefaultServer();
+        if (port === "7181") {
+            return "电信一区";
+        }
+        else if (port === "7182") {
+            return "网通一区";
+        }
+        else {
+            return "bug了"
+        }
     }
 }

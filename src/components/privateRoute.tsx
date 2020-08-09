@@ -1,14 +1,38 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Login } from '../pages/login'
+import { Route, Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import { SessionUtil } from '../utils/sessionUtil';
 
-export class PrivateRoute extends Route {
+class PrivateRoute extends React.Component<IProps> {
     render() {
         return (
-            SessionUtil.isAuth() ?
-                <Route path={this.props.path} component={this.props.component} exact={this.props.exact} render={this.props.render}></Route>
-                :
-                <Redirect to="/login"></Redirect>
+            <Route path={this.props.path} component={this.getComponent()} exact={this.props.exact} render={this.getRender()}></Route>
         );
     }
+    getComponent = () => {
+        if (SessionUtil.isAuth()) {
+            return this.props.component;
+        }
+        else {
+            return Login;
+        }
+    }
+
+    getRender = () => {
+        if (SessionUtil.isAuth()) {
+            return this.props.render;
+        }
+        else {
+            return () => (<Login {...this.props}></Login>);
+        }
+    }
+}
+
+export default withRouter(PrivateRoute)
+
+interface IProps extends RouteComponentProps {
+    path: string;
+    component?: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
+    exact?: boolean;
+    render?: (props: RouteComponentProps<any>) => React.ReactNode
 }

@@ -16,7 +16,7 @@ export class SpeachRank extends React.Component<IProps, IState> {
                 renderItem={item => (
                     <List.Item>
                         <List.Item.Meta
-                            avatar={"1"}
+                            avatar={item.rank}
                             title={item.userName}
                             description={<Progress percent={item.percent} status="active"></Progress >}
                         ></List.Item.Meta>

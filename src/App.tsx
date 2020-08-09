@@ -5,8 +5,9 @@ import { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined, BarChartOutlined } 
 import { ChatRoom } from './components/chatRoom';
 import { SignOut } from './components/signOut'
 import { RouteComponentProps, Link } from 'react-router-dom'
-import { PrivateRoute } from './components/privateRoute';
+import PrivateRoute from './components/privateRoute';
 import { Statistics } from './components/statistics'
+import { SessionUtil } from './utils/sessionUtil';
 
 const { Header, Content, Sider } = Layout;
 
@@ -30,7 +31,7 @@ export class App extends React.Component<IProps, IState> {
                             聊天室
                         </Menu.Item>
                         <Menu.Item key="2" icon={<BarChartOutlined />}>
-                            <Link to="/statistics">各种统计</Link>
+                            <Link to="/home/statistics">各种统计</Link>
                         </Menu.Item>
                     </Menu>
                 </Sider>
@@ -40,6 +41,7 @@ export class App extends React.Component<IProps, IState> {
                             className: 'trigger',
                             onClick: this.toggle,
                         })}
+                        {SessionUtil.getCurrentServerName()}
                         <SignOut {...this.props}></SignOut>
                     </Header>
                     <Content
@@ -50,8 +52,8 @@ export class App extends React.Component<IProps, IState> {
                             minHeight: 280,
                         }}
                     >
-                        <PrivateRoute path="/statistics" exact component={Statistics}></PrivateRoute>
-                        <PrivateRoute path="/" exact render={(props) => (<ChatRoom url={"hall"} {...props} ></ChatRoom>)}></PrivateRoute>
+                        <PrivateRoute path="/home/statistics" exact component={Statistics} {...this.props}></PrivateRoute>
+                        <PrivateRoute path="/home" exact render={(props: any) => (<ChatRoom url={"hall"} {...props} ></ChatRoom>)} {...this.props}></PrivateRoute>
                     </Content>
                 </Layout >
             </Layout >

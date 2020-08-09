@@ -1,12 +1,14 @@
 import React from 'react';
-import { Row, Col, Form, Input, Button, Modal } from 'antd'
+import { Row, Col, Form, Input, Button, Modal, Select } from 'antd'
 import { LoginModel } from '../models/loginModel'
 import { Api } from '../utils/api';
 import { GlobalUtil } from '../utils/globalUtil'
 import { SessionUtil } from '../utils/sessionUtil';
 import { LoginResponseModel } from '../models/loginResponseModel';
 import { RouteComponentProps } from 'react-router-dom';
+import { Constance } from '../utils/constance';
 const { Password } = Input;
+const { Option } = Select;
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -59,6 +61,16 @@ export class Login extends React.Component<IProps, IState> {
                             </Form.Item>
                             <Form.Item name="password" label="密码" rules={[{ required: true }]}>
                                 <Password onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.formData.password = event.target.value}></Password>
+                            </Form.Item>
+                            <Form.Item label="登录服务器" >
+                                <Select
+                                    defaultValue={SessionUtil.getCurrentServerName()}
+                                    onChange={value => {
+                                        SessionUtil.setDefaultSever(value);
+                                    }}>
+                                    <Option value="7181">电信一区</Option>
+                                    <Option value="7182">联通一区</Option>
+                                </Select>
                             </Form.Item>
                             <Form.Item {...tailLayout}>
                                 <Button type="primary" htmlType="button" loading={this.state.loginBtnLoading} onClick={this.login}>

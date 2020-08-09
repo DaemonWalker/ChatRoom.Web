@@ -5,6 +5,7 @@ import { SpeachRankModel } from '../models/speachRankModel';
 import { LoginResponseModel } from '../models/loginResponseModel'
 import { SessionUtil } from './sessionUtil';
 import { RouteComponentProps } from 'react-router-dom';
+import { UserModel } from '../models/userModel';
 export class Api {
     static checkAuth(): Promise<boolean> {
         let result = ApiUtil.get<boolean>(Constance.URL_AUTH,
@@ -30,4 +31,5 @@ export class Api {
     static speachRank(count: number, success: (res: SpeachRankModel[]) => any) {
         ApiUtil.post(Constance.URL_SPEACHRANK, "post", count, success);
     }
+
 }

@@ -4,14 +4,17 @@ import './styles/index.css';
 import 'antd/dist/antd.css';
 import { App } from './App';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, withRouter } from 'react-router-dom';
 import { Login } from './pages/login';
-import { PrivateRoute } from './components/privateRoute'
+import PrivateRoute from './components/privateRoute'
+import { Regist } from './pages/regist';
 
 ReactDOM.render(
     <BrowserRouter>
-        <Route path="/login" component={Login}></Route>
-        <PrivateRoute path="/" component={App}></PrivateRoute>
+        <Route path="/login" exact component={Login}></Route>
+        <Route path="/regist" exact component={Regist}></Route>
+        <PrivateRoute path="/home" component={App}></PrivateRoute>
+        <PrivateRoute path="/" exact render={() => (<Redirect to="/home"></Redirect>)} ></PrivateRoute>
     </BrowserRouter>,
     document.getElementById('root')
 );
